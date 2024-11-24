@@ -1,33 +1,9 @@
+"use server";
+
+import { prisma } from "@/lib/db";
+import { getStripeSession, stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import { getUser } from "./actionsUsers";
-import { prisma } from "./db";
-import { stripe } from "./stripe";
-
-export const getStripeSession = async ({
-  priceId,
-  domainUrl,
-  customerId,
-}: {
-  priceId: string;
-  domainUrl: string;
-  customerId: string;
-}) => {
-  const session = await stripe.checkout.sessions.create({
-    customer: customerId,
-    mode: "subscription",
-    billing_address_collection: "auto",
-    line_items: [{ price: priceId, quantity: 1 }],
-    payment_method_types: ["card"],
-    customer_update: {
-      address: "auto",
-      name: "auto",
-    },
-    success_url: `${domainUrl}/dashboard/payment/success}`,
-    cancel_url: `${domainUrl}/dashboard/payment/cancel}`,
-  });
-
-  return session.url as string;
-};
 
 export const getDataStripeUser = async (userId: string) => {
   const data = await prisma.subscription.findUnique({
@@ -55,7 +31,7 @@ export const createSubscription = async () => {
 
   const dbUser = await prisma.user.findUnique({
     where: {
-      clerkUserId: user?.clerkUserId as string,
+      clerkUserId: user.clerkUserId as string,
     },
     select: {
       stripeCustomerId: true,
@@ -63,7 +39,7 @@ export const createSubscription = async () => {
   });
 
   if (!dbUser?.stripeCustomerId) {
-    throw new Error("Stripe customer ID not found");
+    throw new Error("User doesn't have a Stripe customer ID not found");
   }
 
   const subscriptionUrl = await getStripeSession({
