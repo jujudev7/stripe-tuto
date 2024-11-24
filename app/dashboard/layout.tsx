@@ -1,8 +1,9 @@
-import { addUserToDatabase } from "@/lib/actionsUsers";
-import React from "react";
-// import { prisma } from "@/lib/db";
+import { addUserToDatabase, getUser } from "@/lib/actionsUsers";
+import { prisma } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export default async function layout({
   children,
@@ -20,6 +21,21 @@ export default async function layout({
     const image = user.imageUrl || "";
 
     await addUserToDatabase(userId, fullName, email, image);
+  }
+
+  const userDb = await getUser();
+
+  if (!userDb?.stripeCustomerId) {
+    const stripeCustomer = await stripe.customers.create({
+      email: userDb?.email as string,
+    });
+
+    await prisma.user.update({
+      where: { clerkUserId: userId },
+      data: {
+        stripeCustomerId: stripeCustomer.id as string,
+      },
+    });
   }
 
   return (
