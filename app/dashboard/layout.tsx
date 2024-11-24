@@ -5,7 +5,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 
-export default async function layout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -13,17 +13,17 @@ export default async function layout({
   const { userId } = await auth();
   const user = await currentUser();
 
+  const userDb = await getUser();
+
   if (!user || !userId) {
-    redirect("/sign-in");
+    redirect("/");
   } else {
-    const fullName = `${user.firstName} ${user.lastName}` || "";
-    const email = user.emailAddresses[0].emailAddress || "";
+    const fullName = `${user.firstName} + " " + ${user.lastName}` || "";
+    const email = user.emailAddresses[0]?.emailAddress || "";
     const image = user.imageUrl || "";
 
     await addUserToDatabase(userId, fullName, email, image);
   }
-
-  const userDb = await getUser();
 
   if (!userDb?.stripeCustomerId) {
     const stripeCustomer = await stripe.customers.create({
