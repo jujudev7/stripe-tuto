@@ -34,7 +34,7 @@ export default async function PremiumCard() {
         </button>
       </form>
       <div className="p-2 rounded-md bg-red-500 hover:bg-red-600 text-white mt-2">
-        <SignOutButton />
+        <SignOutButton>Déconnexion</SignOutButton>
       </div>
     </>
   );
