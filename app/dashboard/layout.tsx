@@ -39,8 +39,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <section className="max-w-[1200px] w-full mx-auto mt-2 p-2">
-      {children}
+    <section className="max-w-[1200px] w-full mx-auto">
+      <div className="w-full h-full">{children}</div>
     </section>
   );
 }

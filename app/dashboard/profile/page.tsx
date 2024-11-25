@@ -14,6 +14,9 @@ export default async function PageDashboard() {
   const dataStripe = await getDataStripeUser(userId as string);
 
   return (
-    <>{dataStripe?.status === "active" ? <PremiumCard /> : <MemberCard />}</>
+    <>
+      <h1 className="text-center font-bold text-2xl mt-4">Mon compte</h1>
+      {dataStripe?.status === "active" ? <PremiumCard /> : <MemberCard />}
+    </>
   );
 }
