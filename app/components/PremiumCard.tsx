@@ -20,7 +20,12 @@ export default async function PremiumCard() {
         priority
       />
       <h1>Bienvenue {user?.fullName}</h1>
-      <p>Email : {user?.emailAddresses[0].emailAddress}</p>
+      <p>
+        Email :{" "}
+        <span className="font-semibold">
+          {user?.emailAddresses[0].emailAddress}
+        </span>
+      </p>
 
       <form className="my-4" action={createCustomerPortal}>
         <button className="p-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white w-full">
