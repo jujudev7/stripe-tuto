@@ -1,4 +1,5 @@
 import { createCustomerPortal } from "@/lib/actionsStripe";
+import { SignOutButton } from "@clerk/nextjs";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 
@@ -10,13 +11,13 @@ export default async function PremiumCard() {
     redirect("/");
   }
   return (
-    <div className="w-full h-screen flex items-center justify-center flex-col">
+    <>
       <Image
         src={user?.imageUrl as string}
         width={150}
         height={150}
         alt=""
-        className="rounded-full mb-2"
+        className="rounded-full mb-4"
         priority
       />
       <h1>Bienvenue {user?.fullName}</h1>
@@ -32,6 +33,9 @@ export default async function PremiumCard() {
           Modifier mon abonnement
         </button>
       </form>
-    </div>
+      <div className="p-2 rounded-md bg-red-500 hover:bg-red-600 text-white mt-2">
+        <SignOutButton />
+      </div>
+    </>
   );
 }

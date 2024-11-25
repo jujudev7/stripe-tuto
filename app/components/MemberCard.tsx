@@ -11,7 +11,7 @@ export default async function MemberCard() {
     redirect("/");
   }
   return (
-    <section className="w-full h-[calc(100vh-50px)] flex items-center justify-center flex-col">
+    <>
       <Image
         src={user?.imageUrl as string}
         width={150}
@@ -37,6 +37,6 @@ export default async function MemberCard() {
       <div className="p-2 rounded-md bg-red-500 hover:bg-red-600 text-white mt-2">
         <SignOutButton />
       </div>
-    </section>
+    </>
   );
 }
